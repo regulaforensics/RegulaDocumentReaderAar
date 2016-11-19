@@ -3,6 +3,7 @@
 regula_license
 *.properties
 *.so
+build/
 
 # Built application files
 *.aar

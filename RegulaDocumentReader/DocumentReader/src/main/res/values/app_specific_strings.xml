@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="strSupportEmail">support@regulaforensics.com</string>
+    <string name="strWebsite">http://regulaforensics.com</string>
+    <string name="strTwitterLink"> \u0040regula_support</string>
+    <string name="strFacebookLink">facebook.com/regulaforensics</string>
+    <string name="strSupportWebsite">mobile.regulaforensics.com</string>
+    <string name="strAboutInfoP1">
+        Application performs on-device high speed OCR and parsing of MRZ (machine readable zone) from ICAO 9303 compliant documents (passport, visa, ID card) and ISO 18013 compliant documents (driver\'s licenses).
+    </string>
+    <string name="strAboutInfoP2">
+        No need to position the document carefully and precisely in front of the camera - just make sure, that MRZ in any way fits in frame (horizontally, vertically, diagonally) and camera is focused on the document.
+    </string>
+    <string name="strAboutInfoP3">
+        MRZ will be detected, cropped, rotated, recognized, parsed and verified automatically.
+    </string>
+    <string name="strAboutInfoP4">
+        - On-device computations only, no need for network connection
+        \n- High performance with high accuracy
+        \n- Works on the whole image frame, automatic detection of MRZ
+        \n- Works with live video stream or saved images
+        \n- Parsing MRZ lines to separate fields
+        \n- Verification of check digits
+        \n- Verification of dates for correctness (expiry date, dates existence, etc.)
+        \n- Verification of ISO codes (correctness and existence)
+        \n- Many custom / non-standard MRZ filling formats supported in parsing to fields for different countries
+        \n- SDK available for developers, easy to integrate into any application
+    </string>
+    <string name="strAboutInfoP5">
+        MRZ OCR library is available for purchase separately.
+    </string>
+    <string name="strAboutInfoP6">
+        For business related questions please contact:
+    </string>
+    <string name="strAboutInfoP7">
+        For more information, updates and useful links, please visit our website:
+    </string>
+    <string name="strLightOn">Light On</string>
+    <string name="strLightOff">Light Off</string>
+    <string name="strSendImageForLearning">If there are constant errors in character recognition for the same document, please, help us improve recognition quality by sending anonymous data packet.</string>
+    <string name="strSend">Send</string>
+    <string name="strSendEmail">Send E-mail</string>
+    <string name="strContactUs">Please contact us if you have any questions, issues or suggestions:</string>
+    <string name="strEmail">E-mail:</string>
+    <string name="strWeb">Web:</string>
+    <string name="strTwitter">Twitter:</string>
+    <string name="strFacebook">Facebook:</string>
+    <string name="strCopyright">\u00a9 Regula Forensics, Inc. 2004-%s</string>
+    <string name="strLicenseInvalid">Unable to validate license!</string>
+    <string name="strMoveToCenter">Please, position MRZ on the center of the screen</string>
+    <string name="strMoveCloser">Please, move camera closer to document</string>
+    <string name="strHoldStraight">Please, hold camera straight</string>
+    <string name="strOutOfFocus">MRZ area is out of focus</string>
+    <string name="app_name">Regula Document Reader</string>
+    <string name="no_mrz">MRZ not found</string>
+    <string name="mrz">MRZ:</string>
+    <string name="no_camera">No camera detected on the device</string>
+    <string name="no_camera_access">Unable to access camera</string>
+    <string name="camera_facing">Camera facing: %1$s</string>
+    <string name="camera_max_resolution">Max preview size: %1$s</string>
+    <string name="camera_ver_angle">Camera vertical angle (degrees): %1$s</string>
+    <string name="camera_hor_angle">Camera horizontal angle (degrees): %1$s</string>
+    <string name="front">Front</string>
+    <string name="back">Back</string>
+    <string name="description">Description:</string>
+    <string name="camera">Camera</string>
+    <string name="camera_list">List of available back cameras:</string>
+    <string name="image_saving">Images saving</string>
+    <string name="save_images_from_videostream">Save images from video stream</string>
+    <string name="browse">Browse</string>
+    <string name="product_license">Product license</string>
+    <string name="builin_license">Built-in license</string>
+</resources>

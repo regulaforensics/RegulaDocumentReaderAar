@@ -67,8 +67,8 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
         try {
             holder.setFormat(PixelFormat.TRANSPARENT);
-            Camera.Size size = getOptimalPreviewSize(params.getSupportedPreviewSizes(), w, h);
-            params.setPreviewSize(size.width, size.height);
+            //Camera.Size size = getOptimalPreviewSize(params.getSupportedPreviewSizes(), w, h);
+            //params.setPreviewSize(size.width, size.height);
 
             boolean doManualFocus = false;
             if(params.getSupportedFocusModes().contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE))
@@ -84,7 +84,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
             }
 
             //hack to make Nexus work )
-            Camera.Size picturesize = getPictureSize(params.getSupportedPictureSizes(), size);
+            Camera.Size picturesize = getPictureSize(params.getSupportedPictureSizes(), params.getPreviewSize());
             params.setPictureSize(picturesize.width, picturesize.height);
 
             Log.d(DocumentReader.DEBUG, "Picture size set to " +picturesize.width + "*" + picturesize.height);
@@ -146,35 +146,35 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         }
     }
 
-    private Camera.Size getOptimalPreviewSize(List<Camera.Size> sizes, int w, int h) {
-        final double ASPECT_TOLERANCE = 0.1;
-        double targetRatio=(double)w / h;
-
-        if (sizes == null) return null;
-
-        Camera.Size optimalSize = null;
-        double minDiff = Double.MAX_VALUE;
-
-        for (Camera.Size size : sizes) {
-            double ratio = (double) size.width / size.height;
-            if (Math.abs(ratio - targetRatio) > ASPECT_TOLERANCE) continue;
-            if (Math.abs(size.height - h) < minDiff) {
-                optimalSize = size;
-                minDiff = Math.abs(size.height - h);
-            }
-        }
-
-        if (optimalSize == null) {
-            minDiff = Double.MAX_VALUE;
-            for (Camera.Size size : sizes) {
-                if (Math.abs(size.height - h) < minDiff) {
-                    optimalSize = size;
-                    minDiff = Math.abs(size.height - h);
-                }
-            }
-        }
-        return optimalSize;
-    }
+//    private Camera.Size getOptimalPreviewSize(List<Camera.Size> sizes, int w, int h) {
+//        final double ASPECT_TOLERANCE = 0.1;
+//        double targetRatio=(double)w / h;
+//
+//        if (sizes == null) return null;
+//
+//        Camera.Size optimalSize = null;
+//        double minDiff = Double.MAX_VALUE;
+//
+//        for (Camera.Size size : sizes) {
+//            double ratio = (double) size.width / size.height;
+//            if (Math.abs(ratio - targetRatio) > ASPECT_TOLERANCE) continue;
+//            if (Math.abs(size.height - h) < minDiff) {
+//                optimalSize = size;
+//                minDiff = Math.abs(size.height - h);
+//            }
+//        }
+//
+//        if (optimalSize == null) {
+//            minDiff = Double.MAX_VALUE;
+//            for (Camera.Size size : sizes) {
+//                if (Math.abs(size.height - h) < minDiff) {
+//                    optimalSize = size;
+//                    minDiff = Math.abs(size.height - h);
+//                }
+//            }
+//        }
+//        return optimalSize;
+//    }
 
     @SuppressWarnings("unused") //Might be used
     private Camera.Size getBiggestCameraSize(List<Camera.Size> sizes) {

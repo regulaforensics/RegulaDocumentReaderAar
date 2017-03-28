@@ -134,6 +134,23 @@
             android:autoLink="web"
             android:paddingBottom="8dp"/>
 
+        <TextView
+            android:text="@string/strAboutInfoP8"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView17"
+            android:textAppearance="@android:style/TextAppearance.Medium"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/privacyTv"
+            android:text="@string/strPrivacyPolicy"
+            android:textAppearance="@android:style/TextAppearance.Medium"
+            android:autoLink="web"
+            android:paddingBottom="8dp"/>
+
     </LinearLayout>
 
 </ScrollView>

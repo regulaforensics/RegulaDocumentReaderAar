@@ -31,6 +31,7 @@ import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -38,11 +39,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.regula.sdk.enums.MRZDetectorErrorCode;
 
 import java.util.Calendar;
+import java.util.List;
 
 import static android.widget.Toast.LENGTH_SHORT;
 
@@ -256,14 +259,39 @@ public class CaptureActivity extends Activity {
             mCameraPreview = new CameraPreview(CaptureActivity.this, mCamera, mCameraId, previewCallback);
             Log.d(DocumentReader.DEBUG, "OnResume: Camera preview created");
 
+            Camera.Size chosen = getBestPreviewSize(mCamera.getParameters().getSupportedPreviewSizes());
+            mCamera.getParameters().setPreviewSize(chosen.width, chosen.height);
+
             DisplayMetrics metrics = new DisplayMetrics();
             getWindowManager().getDefaultDisplay().getMetrics(metrics);
             mDisplayWidth = metrics.widthPixels;
             mDisplayHeight = metrics.heightPixels;
 
+            LinearLayout.LayoutParams params = null;
+            int newHeight = (int) Math.round((double)(chosen.height*mDisplayWidth)/chosen.width);
+            int newWidth = (int) Math.round ((double) (mDisplayHeight*chosen.width)/chosen.height);
+
+            int heightDiff = newHeight - mDisplayHeight;
+            int widthDiff = newWidth - mDisplayWidth;
+
+            if(heightDiff> 0 && widthDiff >= 0){ //if both are greater than 0 - choose minimum
+                if(widthDiff >= heightDiff){
+                    params=new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, newHeight);
+                } else {
+                    params=new LinearLayout.LayoutParams(newWidth, ViewGroup.LayoutParams.MATCH_PARENT);
+                }
+            } else { //otherwise choose maximum
+                if(widthDiff >= heightDiff){
+                    params=new LinearLayout.LayoutParams(newWidth, mDisplayHeight);
+                } else {
+                    params=new LinearLayout.LayoutParams(mDisplayWidth, newHeight);
+                }
+            }
+            params.gravity= Gravity.CENTER;
+
             ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             if(mCameraPreview.getParent()==null) {
-                mPreviewHolder.addView(mCameraPreview);
+                mPreviewHolder.addView(mCameraPreview,params);
             }
             mOverlayDrawView.setZOrderMediaOverlay(true);
             mOverlayDrawView.getHolder().setFormat(PixelFormat.TRANSPARENT);
@@ -342,7 +370,7 @@ public class CaptureActivity extends Activity {
                                         Log.d(DocumentReader.DEBUG, "AutoFocus success");
                                         drawRect(mOverlayDrawView, mAutoFocusX, mAutoFocusY, size.width / 10,
                                                 size.height / 10, Color.GREEN);
-                                        if (mAutoFocusSound != null)
+                                        if (mAutoFocusSound != null && !mAutoFocusSound.isPlaying())
                                             mAutoFocusSound.start();
                                     } else {
                                         Log.d(DocumentReader.DEBUG, "AutoFocus failed");
@@ -469,28 +497,53 @@ public class CaptureActivity extends Activity {
     }
 
     private Camera getCameraInstance() {
-        if (CaptureActivity.this.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
-            if(mCameraId==-1) {
-                int numberOfCameras = Camera.getNumberOfCameras();
-                Log.d(DocumentReader.DEBUG, "Number of cameras found:" + numberOfCameras);
-                for (int i = 0; i < numberOfCameras; i++) {
-                    Camera.CameraInfo info = new Camera.CameraInfo();
-                    Camera.getCameraInfo(i, info);
+        try{
+            if (CaptureActivity.this.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
+                if (mCameraId == -1) {
+                    int numberOfCameras = Camera.getNumberOfCameras();
+                    Log.d(DocumentReader.DEBUG, "Number of cameras found:" + numberOfCameras);
+                    for (int i = 0; i < numberOfCameras; i++) {
+                        Camera.CameraInfo info = new Camera.CameraInfo();
+                        Camera.getCameraInfo(i, info);
 
-                    if (info.facing == Camera.CameraInfo.CAMERA_FACING_BACK) {
-                        mCameraId = i;
+                        if (info.facing == Camera.CameraInfo.CAMERA_FACING_BACK) {
+                            mCameraId = i;
+                            break;
+                        }
+                    }
+                }
+
+                Camera camera = Camera.open(mCameraId);
+
+                mIsFlashAvailable = getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH)
+                        && camera.getParameters().getSupportedFlashModes() != null
+                        && camera.getParameters().getSupportedFlashModes().contains(Parameters.FLASH_MODE_TORCH);
+
+                return camera;
+            }
+        } catch (Exception ex){
+            ex.printStackTrace();
+        }
+        return null;
+    }
+
+    private Camera.Size getBestPreviewSize(List<Camera.Size> sizes){
+        Camera.Size biggest = null;
+        for(Camera.Size size:sizes){
+            if(size.width<=1920 && size.height<=1080) {
+                if (size.width == 1920 && size.height == 1080) {
+                    biggest = size;
+                    break;
+                }
+                if(biggest==null)
+                    biggest=size;
+                else{
+                    if(size.height>=biggest.height && size.width>=biggest.width){
+                        biggest=size;
                     }
                 }
             }
-
-            Camera camera = Camera.open(mCameraId);
-
-            mIsFlashAvailable = getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH)
-                    && camera.getParameters().getSupportedFlashModes() != null
-                    && camera.getParameters().getSupportedFlashModes().contains(Parameters.FLASH_MODE_TORCH);
-
-            return camera;
         }
-        return null;
+        return biggest;
     }
 }

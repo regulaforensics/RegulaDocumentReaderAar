@@ -41,7 +41,7 @@ import javax.xml.parsers.ParserConfigurationException;
  */
 public final class DocumentReader {
     @SuppressWarnings("unused")
-    public static final int FORMAT_JSON = 0, FORMAT_XML = 1, READER_REQUEST_CODE =1101010;
+    public static final int FORMAT_JSON = 0, FORMAT_XML = 1, READER_REQUEST_CODE = 1;
     public static final String CAMERA_ID = "CameraId";
 
     static final String DEBUG = "MRZ_DETECTOR";
@@ -89,7 +89,8 @@ public final class DocumentReader {
         InputStream datInput = null;
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         try {
-            System.loadLibrary("mrzdetectorpro");
+            System.loadLibrary("MrzDetector");
+
             Log.d(DEBUG, "MRZ detector loaded");
             datInput = context.getResources().openRawResource(R.raw.mrzdetector);
             int i;
@@ -411,4 +412,6 @@ public final class DocumentReader {
     @SuppressWarnings("JniMissingFunction") //this function is contained inside mrzdetectorpro.so lib
     private static native void setMrzDetectorDat(byte[] dataSize);
     //endregion
+
+    private static native String stringFromJNI();
 }

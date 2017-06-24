@@ -202,9 +202,8 @@ public final class DocumentReader {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-
-                    return errorcode;
                 }
+                return errorcode;
             }
             return MRZDetectorErrorCode.INPUT_CONTAINER_NULL_POINTER;
         }
